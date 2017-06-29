@@ -6,7 +6,7 @@
   "scripts": {
     "start": "gulp watch --gulpfile ./toolkit/gulpfile.js"
   },
-  "author": "",
+  "author": "Michiel Kikkert (Kikkert ICT)",
   "license": "ISC",
   "dependencies": {
     "@types/jquery": "^3.2.5",
