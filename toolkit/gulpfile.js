@@ -14,6 +14,10 @@ const builders = {
         src:    ["../src/*.html"],
         dest:   buildpath
     },
+    assets: {
+        src:    ["../src/assets/**/*.*"],
+        dest:   buildpath+"/assets"
+    },
     fonts: {
         src:    ["../node_modules/font-awesome/fonts/*.*"],
         dest:   buildpath+"/fonts"
@@ -32,10 +36,6 @@ const builders = {
         sources: ["../src/sass/**/*.scss"]
     }
 }
-
-browserSync.init({
-    server: "../develop"
-});
 
 // VENDOR
 gulp.task("vendor", function() {
@@ -111,6 +111,18 @@ gulp.task('html', function () {
     }
 })
 
+// ---------- ASSETS COPY
+gulp.task('assets', function () {
+    console.log('-- gulp is running task assets');
+    const builder = builders.assets;
+
+    for (var i in builder.src) {
+        var src = builder.src[i];
+        return gulp.src(src)
+            .pipe(gulp.dest(builder.dest))
+    }
+})
+
 // ---------- FONTS COPY
 gulp.task('fonts', function () {
     console.log('-- gulp is running task fonts');
@@ -129,8 +141,12 @@ gulp.task('default', function(){
     gulp.run('watch');
 });
 
-gulp.task('watch', ['html', 'sass', 'typescript', 'fonts'], function() {
+gulp.task('watch', ['html', 'assets', 'sass', 'typescript', 'fonts'], function() {
+    browserSync.init({
+        server: "../develop"
+    });
     gulp.watch(builders.html.src, ['html']).on('change', browserSync.reload);
+    gulp.watch(builders.assets.src, ['assets']).on('change', browserSync.reload);
     gulp.watch(builders.sass.sources, ['sass']);
     gulp.watch(builders.typescript.src, ['typescript']).on('change', browserSync.reload);
 });
