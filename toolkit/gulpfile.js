@@ -3,7 +3,8 @@ const ts = require('gulp-typescript');
 const sass = require('gulp-sass');
 const include = require('gulp-include');
 const yargs = require('yargs');
-var browserSync = require('browser-sync').create();
+const browserSync = require('browser-sync').create();
+const sourcemaps = require('gulp-sourcemaps');
 
 const cliargs = yargs.argv;
 const buildpath = cliargs.production ? '../releases/current' : '../develop';
@@ -61,6 +62,7 @@ gulp.task('typescript', function() {
     for (var i in builder.src) {
         var src = builder.src[i];
         return gulp.src(src)
+            .pipe(sourcemaps.init())
             .pipe(ts({
                 "noImplicitAny": true,
                 "target": "es5",
@@ -77,6 +79,7 @@ gulp.task('typescript', function() {
                 "lib": ["es6", "dom"],
                 "outFile": "ts.bundle.js"
             }))
+            .pipe(sourcemaps.write())
             .pipe(gulp.dest(builder.dest))
     }
 
